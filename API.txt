@@ -1,0 +1,29 @@
+详细API
+	描述：这是一个实现图片轮播的插件，其中允许用7张图片，如需添加可以自行修改。
+	
+首先在您的页面上link 我们的css/jquery.zyslide.css文件，并且引入libs/jquery-3.1.1.js和js/jquery.zyslide.js文件.
+然后本插件在前台HTML页面内的形式如下：
+	<div class="slide zy-slide>
+		<section class="zy-prev">前一张</section>
+		<section class="zy-next">后一张</section>
+		<!--ul>(li>img[src="images/$.jpg" alt="轮播图片"])*7-->
+		<ul>
+			<li><img src="images/1.jpg" alt="轮播图片" /></li>
+			<li><img src="images/2.jpg" alt="轮播图片" /></li>
+			<li><img src="images/3.jpg" alt="轮播图片" /></li>
+			<li><img src="images/4.jpg" alt="轮播图片" /></li>
+			<li><img src="images/5.jpg" alt="轮播图片" /></li>
+			<li><img src="images/6.jpg" alt="轮播图片" /></li>
+			<li><img src="images/7.jpg" alt="轮播图片" /></li>
+		</ul>
+	</div>
+其中的images/1.jpg 的src可根据用户的实际情况而作修改。
+
+接着用户可以自行调用调用格式为：
+	jQuery(selector).zySlide([param])或者为$(selector).zySlide([param]);
+	其中selector为此轮播图根标签的选择器，param为用户的设置的参数，可以设置延迟时间:delay,也可以设置速度：speed
+	应用如下：
+	     jQuery('#slide').zySlide({delay:2000,speed:5000})
+	注意：此插件支持链式调用，使用方式如下：
+		jQuery('.slide').zySlide({speed:1000}).css({
+			'backgroundColor':'yellow'});
