@@ -1,72 +1,145 @@
+/*
+ * //首先我们把代码者样改:
+	function slide(){
+		//把下面的代码全部粘贴进来
+	}
+	
+	slide();
+ * 
+ * 
+ * **/
 
-//规定好每张图片处于的位置和状态
-var states = [
-				{ZIndex: 1,width: 120,height: 150,top: 69,left: 134,ZOpacity: 0.2},
-				{ZIndex: 2,width: 130,height: 170,top: 59,left: 0,ZOpacity: 0.5},
-				{ZIndex: 3,width: 170,height: 218,top: 35,left: 110,ZOpacity: 0.7},
-				{ZIndex: 4,width: 224,height: 288,top: 0,left: 263,ZOpacity: 1},
-				{ZIndex: 3,width: 170,height: 218,top: 35,left: 470,ZOpacity: 0.7},
-				{ZIndex: 2,width: 130,height: 170,top: 59,left: 620,ZOpacity: 0.5},
-				{ZIndex: 1,width: 120,height: 150,top: 69,left: 500,ZOpacity: 0.2}
-			 ];
+/*
+//首先我们把代码者样改:
+function slide() {
+	//把下面的代码全部粘贴进来
+	//规定好每张图片处于的位置和状态
+	var states = [{
+		ZIndex: 1,
+		width: 120,
+		height: 150,
+		top: 69,
+		left: 134,
+		ZOpacity: 0.2
+	}, {
+		ZIndex: 2,
+		width: 130,
+		height: 170,
+		top: 59,
+		left: 0,
+		ZOpacity: 0.5
+	}, {
+		ZIndex: 3,
+		width: 170,
+		height: 218,
+		top: 35,
+		left: 110,
+		ZOpacity: 0.7
+	}, {
+		ZIndex: 4,
+		width: 224,
+		height: 288,
+		top: 0,
+		left: 263,
+		ZOpacity: 1
+	}, {
+		ZIndex: 3,
+		width: 170,
+		height: 218,
+		top: 35,
+		left: 470,
+		ZOpacity: 0.7
+	}, {
+		ZIndex: 2,
+		width: 130,
+		height: 170,
+		top: 59,
+		left: 620,
+		ZOpacity: 0.5
+	}, {
+		ZIndex: 1,
+		width: 120,
+		height: 150,
+		top: 69,
+		left: 500,
+		ZOpacity: 0.2
+	}];
 
-var lis =$('#box li');
-//让每个 li 对应上面states的每个状态
-function move(){
-	lis.each(function(index,ele){
-		var state = states[index];
-		$(this).css('z-index',state.ZIndex).finish().animate(state,1000).find('img').css('opacity',state.ZOpacity);
+	var lis = $('#box li');
+	//让每个 li 对应上面states的每个状态
+	function move() {
+		lis.each(function(index, ele) {
+			var state = states[index];
+			$(this).css('z-index', state.ZIndex).finish().animate(state, 1000).find('img').css('opacity', state.ZOpacity);
+		});
+	}
+
+	//让 li 从正中间展开
+	move();
+
+	//下一张 让轮播图发生偏移
+	function next() {
+		//原理：把数组最后一个元素移到素数的第一个位置  shift删除第一个 返回值为删除的值   push插入到最后位置
+		states.push(states.shift());
+		move();
+
+	}
+
+	//点击下一张（section）
+	$('#box .next').click(function() {
+		next();
+	});
+
+	//上一张 让轮播图发生偏移
+	function prev() {
+		//原理：把数组最后一个元素移到素数的第一个位置  pop最后删除 返回值为删除的值   unshift插入到第一个位置
+		states.unshift(states.pop());
+		move();
+	}
+
+	//点击上一张（section）
+	$('#box .prev').click(function() {
+		prev();
+	});
+
+	//自动轮播
+	var interval = null;
+
+	function autoPlay() {
+		interval = setInterval(function() {
+			next();
+		}, 1500);
+	}
+
+	autoPlay();
+
+	//停止轮播
+	$('#box li').add('#box section').hover(function() {
+		clearInterval(interval);
+	}, function() {
+		autoPlay();
 	});
 }
 
-//让 li 从正中间展开
-move();
 
+//调用全局变量 slide
+slide();
+*/
+/*
+ * 
+ * 变量的作用域问题 
+ * 1.全局域(Window)     2.函数域名（Function 或） 3.Block或
+ * 全局域：从页面内被打开 之后到页面被关闭之前始终存在
+ * 函数域：存在于函数调用的一瞬间（也不一定，要考虑闭包的存在）
+ * 
+ * 闭包的理解
+ * 闭包的作用，可以保留函数的作用域（要不让 闭包里面的函数 move 就不能使用slide函数域里面的变量：states lis等）
+ * 闭包产生的必要条件 ：函数里面套函数（内层函数要使用外层函数作用域里面的变量）
+ * 
+ * 全局遍历会产生闭包吗？
+ * 不会，因为全局变量存在全局域里。
+ * */
 
-//下一张 让轮播图发生偏移
-function next(){
-	//原理：把数组最后一个元素移到素数的第一个位置  shift删除第一个 返回值为删除的值   push插入到最后位置
-	states.push(states.shift());
-	move();
-	
-}
-
-
-//点击下一张（section）
-$('#box .next').click(function(){
-	next();
-});
-
-//上一张 让轮播图发生偏移
-function prev(){
-	//原理：把数组最后一个元素移到素数的第一个位置  pop最后删除 返回值为删除的值   unshift插入到第一个位置
-	states.unshift(states.pop());
-	move();
-}
-
-
-//点击上一张（section）
-$('#box .prev').click(function(){
-	prev();
-});
-
-//自动轮播
-var interval = null;
-
-function　autoPlay(){
-	interval = setInterval(function(){
-		next();
-	},1500);
-}
-
-autoPlay();
-
-//停止轮播
-$('#box li').add('#box section').hover(function(){
-	clearInterval(interval);
-},function(){
-	autoPlay();
-});
 
 /**
  * 中午遗留问题:想一想我们的轮播图能封装成插件吗?会产生什么问题?
@@ -76,3 +149,126 @@ $('#box li').add('#box section').hover(function(){
  * 3.标签 class 的值的问题:prev  next  这些class太大众化了,谁写标签都想叫prev或者next 势必冲突
  * 4.插件文件名命名问题 : index.js  index.css 命名大众化.比如这样修改ZYSlide
  **/
+
+//自运行的匿名函数
+/*
+(function(){
+	alert("自运行函数");
+})()
+*/
+
+/*
+$(function(){
+	alert("自运行函数");
+});
+*/
+
+(function(){
+	//把下面的代码全部粘贴进来
+	//规定好每张图片处于的位置和状态
+	var states = [{
+		ZIndex: 1,
+		width: 120,
+		height: 150,
+		top: 69,
+		left: 134,
+		ZOpacity: 0.2
+	}, {
+		ZIndex: 2,
+		width: 130,
+		height: 170,
+		top: 59,
+		left: 0,
+		ZOpacity: 0.5
+	}, {
+		ZIndex: 3,
+		width: 170,
+		height: 218,
+		top: 35,
+		left: 110,
+		ZOpacity: 0.7
+	}, {
+		ZIndex: 4,
+		width: 224,
+		height: 288,
+		top: 0,
+		left: 263,
+		ZOpacity: 1
+	}, {
+		ZIndex: 3,
+		width: 170,
+		height: 218,
+		top: 35,
+		left: 470,
+		ZOpacity: 0.7
+	}, {
+		ZIndex: 2,
+		width: 130,
+		height: 170,
+		top: 59,
+		left: 620,
+		ZOpacity: 0.5
+	}, {
+		ZIndex: 1,
+		width: 120,
+		height: 150,
+		top: 69,
+		left: 500,
+		ZOpacity: 0.2
+	}];
+
+	var lis = $('#box li');
+	//让每个 li 对应上面states的每个状态
+	function move() {
+		lis.each(function(index, ele) {
+			var state = states[index];
+			$(this).css('z-index', state.ZIndex).finish().animate(state, 1000).find('img').css('opacity', state.ZOpacity);
+		});
+	}
+
+	//让 li 从正中间展开
+	move();
+
+	//下一张 让轮播图发生偏移
+	function next() {
+		//原理：把数组最后一个元素移到素数的第一个位置  shift删除第一个 返回值为删除的值   push插入到最后位置
+		states.push(states.shift());
+		move();
+
+	}
+
+	//点击下一张（section）
+	$('#box .next').click(function() {
+		next();
+	});
+
+	//上一张 让轮播图发生偏移
+	function prev() {
+		//原理：把数组最后一个元素移到素数的第一个位置  pop最后删除 返回值为删除的值   unshift插入到第一个位置
+		states.unshift(states.pop());
+		move();
+	}
+
+	//点击上一张（section）
+	$('#box .prev').click(function() {
+		prev();
+	});
+
+	//自动轮播
+	var interval = null;
+
+	function autoPlay() {
+		interval = setInterval(function() {
+			next();
+		}, 1500);
+	}
+
+	autoPlay();
+
+	//停止轮播
+	$('#box li').add('#box section').hover(function() {
+		clearInterval(interval);
+	}, function() {
+		autoPlay();
+	});
+})()
